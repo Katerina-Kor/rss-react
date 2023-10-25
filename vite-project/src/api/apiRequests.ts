@@ -1,18 +1,36 @@
-import { PeopleResponse } from '../types/apiResponseTypes';
+import { PeopleResponse, PersonResponse } from '../types/apiResponseTypes';
 
 const baseURL: string = 'https://swapi.dev/api/people';
 
-async function getData(url: string = baseURL) {
+const getData = async (url: string = baseURL) => {
+  // const currentUrl = url ? `${url}&page=${pageNumber}` : `${baseURL}/?page=${pageNumber}`;
   const request: Response = await fetch(url);
-  const data: Promise<PeopleResponse> = request.json();
+  const dataResponse: Promise<PeopleResponse> = await request.json();
 
-  return data;
-}
+  return dataResponse;
+};
 
-async function getSearchedData(searchString: string) {
+const getSearchedData = async (searchString: string) => {
   const url: string = `${baseURL}/?search=${searchString}`;
 
-  return getData(url);
-}
+  return (await getData(url)).results;
+};
 
-export { getData, getSearchedData };
+const getWholeData = async () => {
+  let currentPage: number = 1;
+  let currentUrl: string = `${baseURL}/?page=${currentPage}`;
+
+  let responseData: PeopleResponse = await getData(currentUrl);
+  const data: PersonResponse[] = responseData.results;
+
+  while (responseData.next) {
+    currentPage++;
+    currentUrl = `${baseURL}/?page=${currentPage}`;
+    responseData = await getData(currentUrl);
+    data.push(...responseData.results);
+  }
+
+  return data;
+};
+
+export { getWholeData, getSearchedData };

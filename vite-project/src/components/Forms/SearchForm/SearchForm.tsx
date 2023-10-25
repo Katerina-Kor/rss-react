@@ -5,7 +5,7 @@ import {
   FormEvent,
   FormEventHandler,
 } from 'react';
-import { getSearchedData } from '../../../api/apiRequests';
+import { getSearchedData, getWholeData } from '../../../api/apiRequests';
 
 type SearchFormProps = Record<string, never>;
 type SearchFormState = {
@@ -18,7 +18,7 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
     this.state = { value: '' };
   }
 
-  formChange: ChangeEventHandler<HTMLInputElement> = (
+  inputChange: ChangeEventHandler<HTMLInputElement> = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
     this.setState({ value: event.target.value });
@@ -29,14 +29,17 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
   ) => {
     event.preventDefault();
 
-    const data = await getSearchedData(this.state.value);
+    const data =
+      this.state.value.length > 0
+        ? await getSearchedData(this.state.value)
+        : await getWholeData();
     console.log(data);
   };
 
   render(): JSX.Element {
     return (
       <form onSubmit={this.formSubmit}>
-        <input type="text" onChange={this.formChange} />
+        <input type="text" onChange={this.inputChange} />
         <button type="submit">Search</button>
       </form>
     );
