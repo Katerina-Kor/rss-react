@@ -1,36 +1,47 @@
-import { PeopleResponse, PersonResponse } from '../types/apiResponseTypes';
+import {
+  PeopleResponse,
+  PersonResponse,
+  PlanetResponse,
+} from '../types/apiResponseTypes';
 
-const baseURL: string = 'https://swapi.dev/api/people';
+const basePeopleURL: string = 'https://swapi.dev/api/people';
+const basePlanetURL: string = 'https://swapi.dev/api/planets';
 
-const getData = async (url: string = baseURL) => {
-  // const currentUrl = url ? `${url}&page=${pageNumber}` : `${baseURL}/?page=${pageNumber}`;
+const getPeopleData = async (url: string = basePeopleURL) => {
   const request: Response = await fetch(url);
   const dataResponse: Promise<PeopleResponse> = await request.json();
 
   return dataResponse;
 };
 
-const getSearchedData = async (searchString: string) => {
-  const url: string = `${baseURL}/?search=${searchString}`;
+const getSearchedPeopleData = async (searchString: string) => {
+  const url: string = `${basePeopleURL}/?search=${searchString}`;
 
-  return (await getData(url)).results;
+  return (await getPeopleData(url)).results;
 };
 
-const getWholeData = async () => {
+const getWholePeopleData = async () => {
   let currentPage: number = 1;
-  let currentUrl: string = `${baseURL}/?page=${currentPage}`;
+  let currentUrl: string = `${basePeopleURL}/?page=${currentPage}`;
 
-  let responseData: PeopleResponse = await getData(currentUrl);
+  let responseData: PeopleResponse = await getPeopleData(currentUrl);
   const data: PersonResponse[] = responseData.results;
 
   while (responseData.next) {
     currentPage++;
-    currentUrl = `${baseURL}/?page=${currentPage}`;
-    responseData = await getData(currentUrl);
+    currentUrl = `${basePeopleURL}/?page=${currentPage}`;
+    responseData = await getPeopleData(currentUrl);
     data.push(...responseData.results);
   }
 
   return data;
 };
 
-export { getWholeData, getSearchedData };
+const getPlanetData = async (url: string = basePlanetURL) => {
+  const request: Response = await fetch(url);
+  const dataResponse: Promise<PlanetResponse> = await request.json();
+
+  return dataResponse;
+};
+
+export { getWholePeopleData, getSearchedPeopleData, getPlanetData };

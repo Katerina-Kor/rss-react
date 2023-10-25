@@ -5,9 +5,15 @@ import {
   FormEvent,
   FormEventHandler,
 } from 'react';
-import { getSearchedData, getWholeData } from '../../../api/apiRequests';
+import {
+  getSearchedPeopleData,
+  getWholePeopleData,
+} from '../../../api/apiRequests';
+import { PersonResponse } from '../../../types/apiResponseTypes';
 
-type SearchFormProps = Record<string, never>;
+type SearchFormProps = {
+  setData: (newData: PersonResponse[]) => void;
+};
 type SearchFormState = {
   value: string;
 };
@@ -31,9 +37,10 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
 
     const data =
       this.state.value.length > 0
-        ? await getSearchedData(this.state.value)
-        : await getWholeData();
+        ? await getSearchedPeopleData(this.state.value)
+        : await getWholePeopleData();
     console.log(data);
+    this.props.setData(data);
   };
 
   render(): JSX.Element {
