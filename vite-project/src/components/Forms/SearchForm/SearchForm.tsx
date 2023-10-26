@@ -10,6 +10,7 @@ import {
   getWholePeopleData,
 } from '../../../api/apiRequests';
 import { PersonResponse } from '../../../types/apiResponseTypes';
+import './searchForm.css';
 
 type SearchFormProps = {
   setData: (newData: PersonResponse[]) => void;
@@ -45,9 +46,16 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
 
   render(): JSX.Element {
     return (
-      <form onSubmit={this.formSubmit}>
-        <input type="text" onChange={this.inputChange} />
-        <button type="submit">Search</button>
+      <form onSubmit={this.formSubmit} className="form_search">
+        <input
+          type="text"
+          onChange={this.inputChange}
+          className="form_search__input"
+          autoFocus
+        />
+        <button type="submit" className="button form_search__button">
+          search
+        </button>
       </form>
     );
   }

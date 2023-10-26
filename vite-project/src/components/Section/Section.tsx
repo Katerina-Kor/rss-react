@@ -1,4 +1,5 @@
 import { Component, PropsWithChildren } from 'react';
+import './section.css';
 
 type SectionProps = {
   className?: string;

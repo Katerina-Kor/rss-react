@@ -1,16 +1,22 @@
 import { Component } from 'react';
+import { headingLevel } from '../../types/headingTypes';
+import './heading.css';
 
 type HeadingProps = {
-  level: number;
+  level: headingLevel;
   title: string;
   className?: string;
 };
 type HeadingState = Record<string, never>;
 
 class Heading extends Component<HeadingProps, HeadingState> {
-  className = this.props.className ? `title ${this.props.className}` : `title`;
+  className = this.props.className
+    ? `heading heading_${this.props.level} ${this.props.className}`
+    : `heading heading_${this.props.level}`;
   render() {
     switch (this.props.level) {
+      case 1:
+        return <h1 className={this.className}>{this.props.title}</h1>;
       case 2:
         return <h2 className={this.className}>{this.props.title}</h2>;
       case 3:
@@ -21,9 +27,6 @@ class Heading extends Component<HeadingProps, HeadingState> {
         return <h5 className={this.className}>{this.props.title}</h5>;
       case 6:
         return <h6 className={this.className}>{this.props.title}</h6>;
-      case 1:
-      default:
-        return <h1 className={this.className}>{this.props.title}</h1>;
     }
   }
 }
