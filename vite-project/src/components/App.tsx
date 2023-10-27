@@ -63,10 +63,12 @@ class App extends Component<AppProps, AppState> {
           <Section className="section section_person-data">
             {this.state.isLoading ? (
               <Loader />
-            ) : (
+            ) : this.state.personsData.length > 0 ? (
               this.state.personsData.map((person) => (
                 <PersonItem personData={person} key={person.name} />
               ))
+            ) : (
+              <p>{`No such hero in 'Star Wars'`}</p>
             )}
           </Section>
         </ErrorBoundary>
