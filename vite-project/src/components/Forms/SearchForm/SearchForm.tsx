@@ -16,6 +16,7 @@ import CustomStorage from '../../../helpers/CustomStorage';
 type SearchFormProps = {
   setData: (newData: PersonResponse[]) => void;
   searchStringStorage: CustomStorage;
+  changeLoading: (loadingStatus: boolean) => void;
 };
 type SearchFormState = {
   value: string;
@@ -32,6 +33,7 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
   componentDidMount = async () => {
     const data = await this.getData();
     this.props.setData(data);
+    this.props.changeLoading(false);
   };
 
   inputChange: ChangeEventHandler<HTMLInputElement> = (
@@ -46,9 +48,11 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
     event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
+    this.props.changeLoading(true);
 
     const data = await this.getData();
     this.props.setData(data);
+    this.props.changeLoading(false);
   };
 
   getData = async () => {

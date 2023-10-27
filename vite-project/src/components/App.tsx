@@ -9,11 +9,13 @@ import CustomStorage from '../helpers/CustomStorage';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 import ErrorButton from './ErrorButton/ErrorButton';
 import ErrorComponent from './ErrorComponent/ErrorComponent';
+import Loader from './Loader/Loader';
 
 type AppProps = Record<string, never>;
 type AppState = {
   personsData: PersonResponse[];
   searchStringStorage: CustomStorage;
+  isLoading: boolean;
 };
 
 class App extends Component<AppProps, AppState> {
@@ -23,11 +25,22 @@ class App extends Component<AppProps, AppState> {
     this.state = {
       personsData: [],
       searchStringStorage: new CustomStorage('savedSearchText'),
+      isLoading: true,
     };
   }
 
+  // componentDidUpdate(prevProps: AppProps, prevState: AppState): void {
+  //   if (this.state.personData.homeworld !== prevProps.personData.homeworld) {
+  //     this.setHomePlanetName();
+  //   }
+  // }
+
   changePersonsData = (newData: PersonResponse[]) => {
     this.setState({ personsData: newData });
+  };
+
+  changeLoadingStatus = (loadingStatus: boolean) => {
+    this.setState({ isLoading: loadingStatus });
   };
 
   render(): JSX.Element {
@@ -43,13 +56,18 @@ class App extends Component<AppProps, AppState> {
             <SearchForm
               setData={this.changePersonsData}
               searchStringStorage={this.state.searchStringStorage}
+              changeLoading={this.changeLoadingStatus}
             />
             <ErrorButton />
           </Section>
           <Section className="section section_person-data">
-            {this.state.personsData.map((person) => (
-              <PersonItem personData={person} key={person.name} />
-            ))}
+            {this.state.isLoading ? (
+              <Loader />
+            ) : (
+              this.state.personsData.map((person) => (
+                <PersonItem personData={person} key={person.name} />
+              ))
+            )}
           </Section>
         </ErrorBoundary>
       </main>
