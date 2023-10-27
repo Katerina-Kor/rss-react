@@ -25,3 +25,7 @@
 .button.button_search:hover {
   background-color: rgba(255, 216, 21, 0.5);
 }
+
+.button.button_search:disabled {
+  background-color: rgba(185, 196, 202, 0.5);
+}

@@ -20,6 +20,7 @@ type SearchFormProps = {
 };
 type SearchFormState = {
   value: string;
+  isDisabled: boolean;
 };
 
 class SearchForm extends Component<SearchFormProps, SearchFormState> {
@@ -27,6 +28,7 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
     super(props);
     this.state = {
       value: this.props.searchStringStorage.getValue(),
+      isDisabled: true,
     };
   }
 
@@ -34,6 +36,7 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
     const data = await this.getData();
     this.props.setData(data);
     this.props.changeLoading(false);
+    this.setState({ isDisabled: false });
   };
 
   inputChange: ChangeEventHandler<HTMLInputElement> = (
@@ -49,10 +52,12 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
   ) => {
     event.preventDefault();
     this.props.changeLoading(true);
+    this.setState({ isDisabled: true });
 
     const data = await this.getData();
     this.props.setData(data);
     this.props.changeLoading(false);
+    this.setState({ isDisabled: false });
   };
 
   getData = async () => {
@@ -71,9 +76,14 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
           value={this.state.value}
           onChange={this.inputChange}
           className="form_search__input"
+          disabled={this.state.isDisabled}
           autoFocus
         />
-        <button type="submit" className="button button_search">
+        <button
+          type="submit"
+          className="button button_search"
+          disabled={this.state.isDisabled}
+        >
           search
         </button>
       </form>
