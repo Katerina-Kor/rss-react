@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { PersonResponse } from '../../types/apiResponseTypes';
 // import { getPlanetData } from '../../api/apiRequests';
 import './personItem.css';
+import BoldText from '../BoldText/BoldText';
 
 type PersonItemProps = {
   personData: PersonResponse;
@@ -36,13 +37,28 @@ class PersonItem extends Component<PersonItemProps, PersonItemState> {
   render(): JSX.Element {
     return (
       <div className="item_person">
-        <p>{`Name: ${this.props.personData.name}`}</p>
-        <p>{`Birth year: ${this.props.personData.birth_year}`}</p>
-        <p>{`Gender: ${this.props.personData.gender}`}</p>
-        <p>{`Hair color: ${this.props.personData.hair_color}`}</p>
-        <p>{`Skin color: ${this.props.personData.skin_color}`}</p>
-        <p>{`Height: ${this.props.personData.height}`}</p>
-        {/* <p>{`Home world: ${this.state.homePlanet}`}</p> */}
+        <p>
+          {<BoldText text="Name:" />} {` ${this.props.personData.name}`}
+        </p>
+        <p>
+          {<BoldText text="Birth year:" />}
+          {` ${this.props.personData.birth_year}`}
+        </p>
+        <p>
+          {<BoldText text="Gender:" />} {` ${this.props.personData.gender}`}
+        </p>
+        <p>
+          {<BoldText text="Hair color:" />}
+          {` ${this.props.personData.hair_color}`}
+        </p>
+        <p>
+          {<BoldText text="Skin color:" />}
+          {` ${this.props.personData.skin_color}`}
+        </p>
+        <p>
+          {<BoldText text="Height:" />} {` ${this.props.personData.height}`}
+        </p>
+        {/* <p>{<BoldText text='Home world:'/>} {` ${this.state.homePlanet}`}</p> */}
       </div>
     );
   }
