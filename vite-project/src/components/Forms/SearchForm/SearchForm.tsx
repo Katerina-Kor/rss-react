@@ -11,9 +11,11 @@ import {
 } from '../../../api/apiRequests';
 import { PersonResponse } from '../../../types/apiResponseTypes';
 import './searchForm.css';
+import CustomStorage from '../../../helpers/CustomStorage';
 
 type SearchFormProps = {
   setData: (newData: PersonResponse[]) => void;
+  searchStringStorage: CustomStorage;
 };
 type SearchFormState = {
   value: string;
@@ -22,13 +24,22 @@ type SearchFormState = {
 class SearchForm extends Component<SearchFormProps, SearchFormState> {
   constructor(props: SearchFormProps) {
     super(props);
-    this.state = { value: '' };
+    this.state = {
+      value: this.props.searchStringStorage.getValue(),
+    };
   }
+
+  componentDidMount = async () => {
+    const data = await this.getData();
+    this.props.setData(data);
+  };
 
   inputChange: ChangeEventHandler<HTMLInputElement> = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
-    this.setState({ value: event.target.value });
+    const newValue: string = event.target.value;
+    this.setState({ value: newValue });
+    this.props.searchStringStorage.setValue(newValue);
   };
 
   formSubmit: FormEventHandler<HTMLFormElement> = async (
@@ -36,12 +47,16 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
   ) => {
     event.preventDefault();
 
+    const data = await this.getData();
+    this.props.setData(data);
+  };
+
+  getData = async () => {
     const data =
       this.state.value.length > 0
         ? await getSearchedPeopleData(this.state.value)
         : await getWholePeopleData();
-    console.log(data);
-    this.props.setData(data);
+    return data;
   };
 
   render(): JSX.Element {
@@ -49,6 +64,7 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
       <form onSubmit={this.formSubmit} className="form_search">
         <input
           type="text"
+          value={this.state.value}
           onChange={this.inputChange}
           className="form_search__input"
           autoFocus

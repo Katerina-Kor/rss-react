@@ -5,17 +5,22 @@ import { PersonResponse } from '../types/apiResponseTypes';
 import PersonItem from './PersonItem/PersonItem';
 import Heading from './Heading/Heading';
 import { headingLevel } from '../types/headingTypes';
+import CustomStorage from '../helpers/CustomStorage';
 
 type AppProps = Record<string, never>;
 type AppState = {
   personsData: PersonResponse[];
+  searchStringStorage: CustomStorage;
 };
 
 class App extends Component<AppProps, AppState> {
   constructor(props: AppProps) {
     super(props);
 
-    this.state = { personsData: [] };
+    this.state = {
+      personsData: [],
+      searchStringStorage: new CustomStorage('savedSearchText'),
+    };
   }
 
   changePersonsData = (newData: PersonResponse[]) => {
@@ -31,7 +36,10 @@ class App extends Component<AppProps, AppState> {
           className="heading_main"
         />
         <Section className="section">
-          <SearchForm setData={this.changePersonsData} />
+          <SearchForm
+            setData={this.changePersonsData}
+            searchStringStorage={this.state.searchStringStorage}
+          />
         </Section>
         <Section className="section wrapper_person-data">
           {this.state.personsData.map((person) => (
