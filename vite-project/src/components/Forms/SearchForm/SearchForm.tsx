@@ -69,7 +69,7 @@ class SearchForm extends Component<SearchFormProps, SearchFormState> {
           className="form_search__input"
           autoFocus
         />
-        <button type="submit" className="button form_search__button">
+        <button type="submit" className="button button_search">
           search
         </button>
       </form>

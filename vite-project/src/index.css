@@ -60,6 +60,21 @@ a {
   color: black;
 }
 
+.button {
+  font-size: 20px;
+  padding: 8px 15px;
+  font-weight: 500;
+  border-radius: 5px;
+  background-color: rgba(185, 196, 202, 0.5);
+  font-variant: small-caps;
+  transition: 0.3s;
+  /* line-height: 1.5; */
+}
+
+.button:hover {
+  background-color: rgba(185, 196, 202, 0.9);
+}
+
 /* h1 {
   font-size: 3.2em;
   line-height: 1.1;

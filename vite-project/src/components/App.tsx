@@ -6,6 +6,9 @@ import PersonItem from './PersonItem/PersonItem';
 import Heading from './Heading/Heading';
 import { headingLevel } from '../types/headingTypes';
 import CustomStorage from '../helpers/CustomStorage';
+import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
+import ErrorButton from './ErrorButton/ErrorButton';
+import ErrorComponent from './ErrorComponent/ErrorComponent';
 
 type AppProps = Record<string, never>;
 type AppState = {
@@ -35,17 +38,20 @@ class App extends Component<AppProps, AppState> {
           title="find 'star wars' hero"
           className="heading_main"
         />
-        <Section className="section">
-          <SearchForm
-            setData={this.changePersonsData}
-            searchStringStorage={this.state.searchStringStorage}
-          />
-        </Section>
-        <Section className="section wrapper_person-data">
-          {this.state.personsData.map((person) => (
-            <PersonItem personData={person} key={person.name} />
-          ))}
-        </Section>
+        <ErrorBoundary fallback={<ErrorComponent />}>
+          <Section className="section section_search">
+            <SearchForm
+              setData={this.changePersonsData}
+              searchStringStorage={this.state.searchStringStorage}
+            />
+            <ErrorButton />
+          </Section>
+          <Section className="section section_person-data">
+            {this.state.personsData.map((person) => (
+              <PersonItem personData={person} key={person.name} />
+            ))}
+          </Section>
+        </ErrorBoundary>
       </main>
     );
   }

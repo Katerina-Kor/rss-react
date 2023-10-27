@@ -22,17 +22,6 @@
   border-color: #ffd815;
 }
 
-.form_search__button {
-  font-size: 20px;
-  padding: 8px 15px;
-  font-weight: 500;
-  border-radius: 5px;
-  background-color: rgba(185, 196, 202, 0.5);
-  /* border: 1px solid transparent; */
-  font-variant: small-caps;
-  transition: 0.3s;
-}
-
-.form_search__button:hover {
+.button.button_search:hover {
   background-color: rgba(255, 216, 21, 0.5);
 }
