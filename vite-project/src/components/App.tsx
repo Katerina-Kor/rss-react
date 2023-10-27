@@ -8,7 +8,6 @@ import { headingLevel } from '../types/headingTypes';
 import CustomStorage from '../helpers/CustomStorage';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 import ErrorButton from './ErrorButton/ErrorButton';
-import ErrorComponent from './ErrorComponent/ErrorComponent';
 import Loader from './Loader/Loader';
 
 type AppProps = Record<string, never>;
@@ -51,7 +50,7 @@ class App extends Component<AppProps, AppState> {
           title="find 'star wars' hero"
           className="heading_main"
         />
-        <ErrorBoundary fallback={<ErrorComponent />}>
+        <ErrorBoundary>
           <Section className="section section_search">
             <SearchForm
               setData={this.changePersonsData}
