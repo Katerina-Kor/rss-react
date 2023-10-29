@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import { PersonResponse } from '../../types/apiResponseTypes';
-// import { getPlanetData } from '../../api/apiRequests';
 import './personItem.css';
 import BoldText from '../BoldText/BoldText';
 
@@ -16,23 +15,6 @@ class PersonItem extends Component<PersonItemProps, PersonItemState> {
     super(props);
     this.state = { homePlanet: '' };
   }
-
-  // componentDidMount(): void {
-  //   this.setHomePlanetName();
-  // }
-
-  // componentDidUpdate(prevProps: PersonItemProps): void {
-  //   if (this.props.personData.homeworld !== prevProps.personData.homeworld) {
-  //     this.setHomePlanetName();
-  //   }
-  // }
-
-  // setHomePlanetName = async () => {
-  //   const planetData: PlanetResponse = await getPlanetData(
-  //     this.props.personData.homeworld
-  //   );
-  //   this.setState({ homePlanet: planetData.name });
-  // };
 
   render(): JSX.Element {
     return (
@@ -58,7 +40,6 @@ class PersonItem extends Component<PersonItemProps, PersonItemState> {
         <p>
           {<BoldText text="Height:" />} {` ${this.props.personData.height}`}
         </p>
-        {/* <p>{<BoldText text='Home world:'/>} {` ${this.state.homePlanet}`}</p> */}
       </div>
     );
   }

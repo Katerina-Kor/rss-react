@@ -28,12 +28,6 @@ class App extends Component<AppProps, AppState> {
     };
   }
 
-  // componentDidUpdate(prevProps: AppProps, prevState: AppState): void {
-  //   if (this.state.personData.homeworld !== prevProps.personData.homeworld) {
-  //     this.setHomePlanetName();
-  //   }
-  // }
-
   changePersonsData = (newData: PersonResponse[]) => {
     this.setState({ personsData: newData });
   };
