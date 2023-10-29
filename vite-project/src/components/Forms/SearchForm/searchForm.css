@@ -1,0 +1,31 @@
+.form_search {
+  display: flex;
+  column-gap: 5px;
+  padding: 10px;
+  place-content: center;
+}
+
+.form_search__input {
+  font-size: 24px;
+  padding: 5px;
+  min-width: 250px;
+  max-width: 400px;
+  width: 80%;
+  border: 2px solid #909096;
+  background-color: transparent;
+  color: white;
+  border-radius: 5px;
+}
+
+.form_search__input:focus {
+  outline: none;
+  border-color: #ffd815;
+}
+
+.button.button_search:hover {
+  background-color: rgba(255, 216, 21, 0.5);
+}
+
+.button.button_search:disabled {
+  background-color: rgba(185, 196, 202, 0.5);
+}

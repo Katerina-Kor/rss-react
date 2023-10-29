@@ -1,0 +1,17 @@
+.section {
+  width: 100%;
+  padding: 10px;
+}
+
+.section_person-data {
+  display: flex;
+  flex-wrap: wrap;
+  place-content: center;
+  gap: 30px;
+}
+
+.section_search {
+  display: flex;
+  flex-direction: column;
+  place-content: center;
+}
