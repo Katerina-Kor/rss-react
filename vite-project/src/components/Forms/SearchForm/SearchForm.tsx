@@ -1,9 +1,10 @@
 import {
   ChangeEvent,
   ChangeEventHandler,
-  Component,
+  FC,
   FormEvent,
   FormEventHandler,
+  useState,
 } from 'react';
 import {
   getSearchedPeopleData,
@@ -18,77 +19,70 @@ type SearchFormProps = {
   searchStringStorage: CustomStorage;
   changeLoading: (loadingStatus: boolean) => void;
 };
-type SearchFormState = {
-  value: string;
-  isDisabled: boolean;
-};
 
-class SearchForm extends Component<SearchFormProps, SearchFormState> {
-  constructor(props: SearchFormProps) {
-    super(props);
-    this.state = {
-      value: this.props.searchStringStorage.getValue(),
-      isDisabled: true,
-    };
-  }
+const SearchForm: FC<SearchFormProps> = ({
+  setData,
+  searchStringStorage,
+  changeLoading,
+}) => {
+  const [value, setValue] = useState<string>(searchStringStorage.getValue());
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
 
-  componentDidMount = async () => {
-    const data = await this.getData();
-    this.props.setData(data);
-    this.props.changeLoading(false);
-    this.setState({ isDisabled: false });
-  };
+  // componentDidMount = async () => {
+  //   const data = await this.getData();
+  //   this.props.setData(data);
+  //   this.props.changeLoading(false);
+  //   this.setState({ isDisabled: false });
+  // };
 
-  inputChange: ChangeEventHandler<HTMLInputElement> = (
+  const inputChange: ChangeEventHandler<HTMLInputElement> = (
     event: ChangeEvent<HTMLInputElement>
   ) => {
     const newValue: string = event.target.value;
-    this.setState({ value: newValue });
-    this.props.searchStringStorage.setValue(newValue);
+    setValue(newValue);
+    searchStringStorage.setValue(newValue);
   };
 
-  formSubmit: FormEventHandler<HTMLFormElement> = async (
+  const formSubmit: FormEventHandler<HTMLFormElement> = async (
     event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-    this.props.changeLoading(true);
-    this.setState({ isDisabled: true });
+    changeLoading(true);
+    setIsDisabled(true);
 
-    const data = await this.getData();
-    this.props.setData(data);
-    this.props.changeLoading(false);
-    this.setState({ isDisabled: false });
+    const data = await getData();
+    setData(data);
+    changeLoading(false);
+    setIsDisabled(false);
   };
 
-  getData = async () => {
+  const getData = async () => {
     const data =
-      this.state.value.length > 0
-        ? await getSearchedPeopleData(this.state.value)
+      value.length > 0
+        ? await getSearchedPeopleData(value)
         : await getWholePeopleData();
     return data;
   };
 
-  render(): JSX.Element {
-    return (
-      <form onSubmit={this.formSubmit} className="form_search">
-        <input
-          type="text"
-          value={this.state.value}
-          onChange={this.inputChange}
-          className="form_search__input"
-          disabled={this.state.isDisabled}
-          autoFocus
-        />
-        <button
-          type="submit"
-          className="button button_search"
-          disabled={this.state.isDisabled}
-        >
-          search
-        </button>
-      </form>
-    );
-  }
-}
+  return (
+    <form onSubmit={formSubmit} className="form_search">
+      <input
+        type="text"
+        value={value}
+        onChange={inputChange}
+        className="form_search__input"
+        disabled={isDisabled}
+        autoFocus
+      />
+      <button
+        type="submit"
+        className="button button_search"
+        disabled={isDisabled}
+      >
+        search
+      </button>
+    </form>
+  );
+};
 
 export default SearchForm;

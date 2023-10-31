@@ -1,17 +1,16 @@
-import { Component, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import './section.css';
 
 type SectionProps = {
   className?: string;
 };
-type SectionState = Record<string, never>;
 
-class Section extends Component<PropsWithChildren<SectionProps>, SectionState> {
-  render(): JSX.Element {
-    return (
-      <section className={this.props.className}>{this.props.children}</section>
-    );
-  }
-}
+const Section: FC<PropsWithChildren<SectionProps>> = (props) => {
+  return (
+    <section className={props.className ? props.className : ''}>
+      {props.children}
+    </section>
+  );
+};
 
 export default Section;
