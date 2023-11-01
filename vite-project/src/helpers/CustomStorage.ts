@@ -17,4 +17,6 @@ class CustomStorage {
   }
 }
 
-export default CustomStorage;
+const searchStringStorage = new CustomStorage('savedSearchText');
+
+export default searchStringStorage;

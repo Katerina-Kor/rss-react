@@ -1,21 +1,42 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import Section from './Section/Section';
 import SearchForm from './Forms/SearchForm/SearchForm';
 import { PersonResponse } from '../types/apiResponseTypes';
 import PersonItem from './PersonItem/PersonItem';
 import Heading from './Heading/Heading';
 import { headingLevel } from '../types/headingTypes';
-import CustomStorage from '../helpers/CustomStorage';
 import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 import ErrorButton from './ErrorButton/ErrorButton';
 import Loader from './Loader/Loader';
+import { getData } from '../api/apiRequests';
+import searchStringStorage from '../helpers/CustomStorage';
 
 const App: FC = () => {
   const [personData, setPersonData] = useState<PersonResponse[]>([]);
-  const [searchStringStorage] = useState<CustomStorage>(
-    new CustomStorage('savedSearchText')
-  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const fetchData = async () => {
+      try {
+        const data = await getData(
+          searchStringStorage.getValue(),
+          controller.signal
+        );
+        setPersonData(data);
+        setIsLoading(false);
+      } catch (error) {
+        if (error instanceof Error && error.name !== 'AbortError') {
+          throw error;
+        }
+      }
+    };
+    fetchData();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   const changePersonsData = (newData: PersonResponse[]) => {
     setPersonData(newData);
@@ -36,8 +57,8 @@ const App: FC = () => {
         <Section className="section section_search">
           <SearchForm
             setData={changePersonsData}
-            searchStringStorage={searchStringStorage}
             changeLoading={changeLoadingStatus}
+            isLoading={isLoading}
           />
           <ErrorButton />
         </Section>
