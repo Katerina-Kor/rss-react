@@ -14,22 +14,8 @@ const PersonItem: FC<PersonItemProps> = ({ personData }) => {
         {<BoldText text="Name:" />} {` ${personData.name}`}
       </p>
       <p>
-        {<BoldText text="Birth year:" />}
-        {` ${personData.birth_year}`}
-      </p>
-      <p>
-        {<BoldText text="Gender:" />} {` ${personData.gender}`}
-      </p>
-      <p>
-        {<BoldText text="Hair color:" />}
-        {` ${personData.hair_color}`}
-      </p>
-      <p>
-        {<BoldText text="Skin color:" />}
-        {` ${personData.skin_color}`}
-      </p>
-      <p>
-        {<BoldText text="Height:" />} {` ${personData.height}`}
+        {<BoldText text="Race:" />}
+        {` ${personData.race || 'Unknown'}`}
       </p>
     </div>
   );

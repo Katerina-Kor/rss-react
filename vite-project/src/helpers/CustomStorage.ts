@@ -7,8 +7,8 @@ class CustomStorage {
     this.value = localStorage.getItem(key);
   }
 
-  public getValue(): string {
-    return this.value ? this.value : '';
+  public getValue(): string | null {
+    return this.value;
   }
 
   public setValue(newValue: string): void {

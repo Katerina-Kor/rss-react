@@ -6,23 +6,23 @@ import {
   FormEventHandler,
   useState,
 } from 'react';
-import { getData } from '../../../api/apiRequests';
-import { PersonResponse } from '../../../types/apiResponseTypes';
 import './searchForm.css';
 import searchStringStorage from '../../../helpers/CustomStorage';
 
 type SearchFormProps = {
-  setData: (newData: PersonResponse[]) => void;
-  changeLoading: (loadingStatus: boolean) => void;
   isLoading: boolean;
+  resetPages: () => void;
+  fetchData: (page?: number, signal?: AbortSignal | null) => Promise<void>;
 };
 
 const SearchForm: FC<SearchFormProps> = ({
-  setData,
-  changeLoading,
   isLoading,
+  resetPages,
+  fetchData,
 }) => {
-  const [value, setValue] = useState<string>(searchStringStorage.getValue());
+  const [value, setValue] = useState<string>(
+    searchStringStorage.getValue() || ''
+  );
 
   const inputChange: ChangeEventHandler<HTMLInputElement> = (
     event: ChangeEvent<HTMLInputElement>
@@ -36,11 +36,8 @@ const SearchForm: FC<SearchFormProps> = ({
   ) => {
     event.preventDefault();
     searchStringStorage.setValue(value);
-    changeLoading(true);
-
-    const data = await getData(value);
-    setData(data);
-    changeLoading(false);
+    resetPages();
+    fetchData(1);
   };
 
   return (
