@@ -60,7 +60,7 @@ const MainPage: FC = () => {
     <main className="main">
       <Heading
         level={headingLevel.ONE}
-        title="find 'star wars' hero"
+        title="find 'the Lord of rings' hero"
         className="heading_main"
       />
       <ErrorBoundary>
@@ -80,14 +80,17 @@ const MainPage: FC = () => {
               <PersonItem personData={person} key={person.name} />
             ))
           ) : (
-            <p>{`No such hero in 'Star Wars'`}</p>
+            <p>{`No such hero in 'the Lord of rings'`}</p>
           )}
         </Section>
-        <Pagination
-          pagesNumber={pagesNumber}
-          changeCurrentPage={setCurrentPage}
-          fetchData={fetchData}
-        />
+        {!isLoading && personData.length > 0 && (
+          <Pagination
+            pagesNumber={pagesNumber}
+            changeCurrentPage={setCurrentPage}
+            fetchData={fetchData}
+            currentPage={currentPage}
+          />
+        )}
       </ErrorBoundary>
     </main>
   );

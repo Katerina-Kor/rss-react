@@ -1,0 +1,10 @@
+.pagination {
+  padding: 10px 5px;
+  display: flex;
+  column-gap: 3px;
+  place-content: center;
+}
+
+.button.button_current {
+  background-color: #ffd815;
+}
