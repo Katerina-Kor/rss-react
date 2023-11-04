@@ -11,14 +11,19 @@ import Loader from '../Loader/Loader';
 import PersonItem from '../PersonItem/PersonItem';
 import Pagination from '../Pagination/Pagination';
 import { getPeopleData } from '../../api/apiRequests';
+import { Outlet, useSearchParams } from 'react-router-dom';
 
 const MainPage: FC = () => {
   const [personData, setPersonData] = useState<PersonResponse[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pagesNumber, setPagesNumber] = useState<number>(0);
+  const [searchParams, setSearchParams] = useSearchParams({
+    page: `${currentPage}`,
+  });
 
   useEffect(() => {
+    console.log(searchParams);
     const controller = new AbortController();
     fetchData(currentPage, controller.signal);
 
@@ -33,6 +38,7 @@ const MainPage: FC = () => {
     signal: AbortSignal | null = null
   ) => {
     try {
+      setSearchParams({ page: `${page}` });
       setIsLoading(true);
       const data = await getPeopleData(
         page,
@@ -73,24 +79,27 @@ const MainPage: FC = () => {
           <ErrorButton />
         </Section>
         <Section className="section section_person-data">
-          {isLoading ? (
-            <Loader />
-          ) : personData.length > 0 ? (
-            personData.map((person) => (
-              <PersonItem personData={person} key={person.name} />
-            ))
+          {!isLoading ? (
+            <>
+              {personData.length > 0 ? (
+                personData.map((person) => (
+                  <PersonItem personData={person} key={person.name} />
+                ))
+              ) : (
+                <p>{`No such hero in 'the Lord of rings'`}</p>
+              )}
+              <Pagination
+                pagesNumber={pagesNumber}
+                changeCurrentPage={setCurrentPage}
+                fetchData={fetchData}
+                currentPage={currentPage}
+              />
+            </>
           ) : (
-            <p>{`No such hero in 'the Lord of rings'`}</p>
+            <Loader />
           )}
+          <Outlet />
         </Section>
-        {!isLoading && personData.length > 0 && (
-          <Pagination
-            pagesNumber={pagesNumber}
-            changeCurrentPage={setCurrentPage}
-            fetchData={fetchData}
-            currentPage={currentPage}
-          />
-        )}
       </ErrorBoundary>
     </main>
   );
