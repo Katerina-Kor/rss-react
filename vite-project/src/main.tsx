@@ -9,17 +9,14 @@ import {
 } from 'react-router-dom';
 import MainPage from './components/pages/MainPage.tsx';
 import DetailedPersonItem from './components/DetailedPersonItem/DetailedPersonItem.tsx';
+import ErrorUI from './components/ErrorUI/ErrorUI.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route
       path="/"
       element={<MainPage />}
-      errorElement={
-        <div className="wrapper_error">
-          <p className="text_error">Sorry, something went wrong...</p>
-        </div>
-      }
+      errorElement={<ErrorUI errorMessage="" />}
     >
       <Route index element={<DetailedPersonItem />}></Route>
     </Route>

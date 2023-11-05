@@ -5,6 +5,7 @@ import { getDetailedPersonData } from '../../api/apiRequests';
 import { PersonResponse } from '../../types/apiResponseTypes';
 import './detailedPersonItem.css';
 import Loader from '../Loader/Loader';
+import ErrorUI from '../ErrorUI/ErrorUI';
 
 const DetailedPersonItem = () => {
   const [searchParams] = useSearchParams();
@@ -40,7 +41,6 @@ const DetailedPersonItem = () => {
           return;
         }
         if (error instanceof Error) {
-          console.log('error', error);
           setError(error.message);
         }
       } finally {
@@ -54,15 +54,7 @@ const DetailedPersonItem = () => {
   }, [searchParams]);
 
   if (error) {
-    const userErrorText =
-      error === 'Unauthorized.'
-        ? 'Sorry, you are not authorized.'
-        : 'Sorry, something went wrong...';
-    return (
-      <div className="wrapper_error">
-        <p className="text_error">{userErrorText}</p>
-      </div>
-    );
+    return <ErrorUI errorMessage={error} />;
   }
   return (
     <div

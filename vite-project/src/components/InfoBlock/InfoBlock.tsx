@@ -7,6 +7,7 @@ import { PersonResponse } from '../../types/apiResponseTypes';
 import { getPeopleData } from '../../api/apiRequests';
 import searchStringStorage from '../../helpers/CustomStorage';
 import './infoBlock.css';
+import ErrorUI from '../ErrorUI/ErrorUI';
 
 type InfoBlockProps = {
   isLoading: boolean;
@@ -50,7 +51,6 @@ const InfoBlock: FC<InfoBlockProps> = ({
           return;
         }
         if (error instanceof Error) {
-          console.log('error');
           setError(error.message);
         }
       } finally {
@@ -91,17 +91,7 @@ const InfoBlock: FC<InfoBlockProps> = ({
   }, [fetchData, searchParams]);
 
   if (error) {
-    const userErrorText =
-      error === 'Unauthorized.'
-        ? 'Sorry, you are not authorized.'
-        : error === 'Too Many Requests'
-        ? 'Sorry, our server failed, try again in 10 minutes.'
-        : 'Sorry, something went wrong...';
-    return (
-      <div className="wrapper_error">
-        <p className="text_error">{userErrorText}</p>
-      </div>
-    );
+    return <ErrorUI errorMessage={error} />;
   }
   return (
     <div className="section person-data_wrapper">
