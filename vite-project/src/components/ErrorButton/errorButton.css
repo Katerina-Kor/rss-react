@@ -1,0 +1,8 @@
+.button.button_error:hover {
+  background-color: rgba(182, 61, 65, 0.6);
+}
+
+.button_error {
+  width: fit-content;
+  align-self: flex-end;
+}

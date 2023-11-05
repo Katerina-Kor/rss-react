@@ -1,0 +1,9 @@
+.item_person {
+  padding: 15px;
+  border: 1px solid black;
+  width: 400px;
+  background-color: rgba(104, 83, 116, 0.5);
+  display: flex;
+  flex-direction: column;
+  place-content: center;
+}

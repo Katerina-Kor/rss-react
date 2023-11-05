@@ -1,0 +1,17 @@
+.pagination {
+  padding: 10px 5px;
+  display: flex;
+  gap: 3px;
+  place-content: center;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.button.button_current {
+  background-color: #ffd815;
+}
+
+.button.button_next:disabled,
+.button.button_prev:disabled {
+  background-color: rgba(185, 196, 202, 0.5);
+}

@@ -1,0 +1,17 @@
+.heading {
+  font-variant: small-caps;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.heading_1 {
+  font-size: 60px;
+}
+
+.heading_2 {
+  font-size: 56px;
+}
+
+.heading_main {
+  color: #ffd815;
+}
