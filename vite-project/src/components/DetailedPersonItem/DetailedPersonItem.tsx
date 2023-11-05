@@ -22,6 +22,7 @@ const DetailedPersonItem = () => {
     _id: 'NaN',
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!searchParams.has('details')) return;
@@ -35,8 +36,12 @@ const DetailedPersonItem = () => {
         );
         setPersonData(data.docs[0]);
       } catch (error) {
-        if (error instanceof Error && error.name !== 'AbortError') {
-          throw error;
+        if (error instanceof Error && error.name === 'AbortError') {
+          return;
+        }
+        if (error instanceof Error) {
+          console.log('error', error);
+          setError(error.message);
         }
       } finally {
         setIsLoading(false);
@@ -48,6 +53,17 @@ const DetailedPersonItem = () => {
     };
   }, [searchParams]);
 
+  if (error) {
+    const userErrorText =
+      error === 'Unauthorized.'
+        ? 'Sorry, you are not authorized.'
+        : 'Sorry, something went wrong...';
+    return (
+      <div className="wrapper_error">
+        <p className="text_error">{userErrorText}</p>
+      </div>
+    );
+  }
   return (
     <div
       style={{ display: searchParams.has('details') ? 'block' : 'none' }}

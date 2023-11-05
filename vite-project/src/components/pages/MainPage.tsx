@@ -8,6 +8,7 @@ import InfoBlock from '../InfoBlock/InfoBlock';
 
 const MainPage: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <main className="main">
@@ -17,9 +18,14 @@ const MainPage: FC = () => {
         className="heading_main"
       />
       <ErrorBoundary>
-        <SearchForm isLoading={isLoading} />
+        <SearchForm isLoading={isLoading} setError={setError} />
         <ErrorButton />
-        <InfoBlock isLoading={isLoading} setIsLoading={setIsLoading} />
+        <InfoBlock
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          setError={setError}
+          error={error}
+        />
       </ErrorBoundary>
     </main>
   );

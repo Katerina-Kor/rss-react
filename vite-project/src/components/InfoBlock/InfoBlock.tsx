@@ -11,9 +11,16 @@ import './infoBlock.css';
 type InfoBlockProps = {
   isLoading: boolean;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setError: React.Dispatch<React.SetStateAction<string | null>>;
+  error: string | null;
 };
 
-const InfoBlock: FC<InfoBlockProps> = ({ isLoading, setIsLoading }) => {
+const InfoBlock: FC<InfoBlockProps> = ({
+  isLoading,
+  setIsLoading,
+  setError,
+  error,
+}) => {
   const [personData, setPersonData] = useState<PersonResponse[]>([]);
   const [pagesNumber, setPagesNumber] = useState<number>(0);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -28,17 +35,29 @@ const InfoBlock: FC<InfoBlockProps> = ({ isLoading, setIsLoading }) => {
           itemsPerPage,
           signal
         );
+        if (data.page > data.pages) {
+          setSearchParams((prev) => {
+            const newParams = Object.fromEntries(prev.entries());
+            newParams.page = '1';
+            return newParams;
+          });
+          return;
+        }
         setPagesNumber(data.pages);
         setPersonData(data.docs);
       } catch (error) {
-        if (error instanceof Error && error.name !== 'AbortError') {
-          throw error;
+        if (error instanceof Error && error.name === 'AbortError') {
+          return;
+        }
+        if (error instanceof Error) {
+          console.log('error');
+          setError(error.message);
         }
       } finally {
         setIsLoading(false);
       }
     },
-    [itemsPerPage, searchParams, setIsLoading]
+    [itemsPerPage, searchParams, setIsLoading, setError, setSearchParams]
   );
 
   useEffect(() => {
@@ -71,6 +90,19 @@ const InfoBlock: FC<InfoBlockProps> = ({ isLoading, setIsLoading }) => {
     };
   }, [fetchData, searchParams]);
 
+  if (error) {
+    const userErrorText =
+      error === 'Unauthorized.'
+        ? 'Sorry, you are not authorized.'
+        : error === 'Too Many Requests'
+        ? 'Sorry, our server failed, try again in 10 minutes.'
+        : 'Sorry, something went wrong...';
+    return (
+      <div className="wrapper_error">
+        <p className="text_error">{userErrorText}</p>
+      </div>
+    );
+  }
   return (
     <div className="section person-data_wrapper">
       <div className="section section_person-data">

@@ -12,9 +12,10 @@ import { useSearchParams } from 'react-router-dom';
 
 type SearchFormProps = {
   isLoading: boolean;
+  setError: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
-const SearchForm: FC<SearchFormProps> = ({ isLoading }) => {
+const SearchForm: FC<SearchFormProps> = ({ isLoading, setError }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [value, setValue] = useState<string>(
     searchParams.get('name') || searchStringStorage.getValue() || ''
@@ -32,6 +33,7 @@ const SearchForm: FC<SearchFormProps> = ({ isLoading }) => {
   ) => {
     event.preventDefault();
     searchStringStorage.setValue(value);
+    setError(null);
     setSearchParams((prevParams) => {
       const newParams = Object.fromEntries(prevParams.entries());
       newParams.name = value;

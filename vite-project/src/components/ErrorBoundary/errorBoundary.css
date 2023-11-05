@@ -1,7 +1,8 @@
 .wrapper_error {
   position: absolute;
   top: calc(50% - 100px);
-  left: calc(50% - 310px);
+  left: 0px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   row-gap: 15px;

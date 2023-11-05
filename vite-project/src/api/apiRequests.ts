@@ -21,7 +21,10 @@ const getPeopleData = async (
     },
     signal,
   });
-  const dataResponse: Promise<PeopleResponse> = await request.json();
+  if (request.status !== 200) {
+    throw new Error(request.statusText);
+  }
+  const dataResponse: PeopleResponse = await request.json();
 
   return dataResponse;
 };

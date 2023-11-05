@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-// import App from './components/App.tsx';
 import './index.css';
 import {
   createRoutesFromElements,
@@ -19,7 +18,6 @@ const router = createBrowserRouter(
       errorElement={
         <div className="wrapper_error">
           <p className="text_error">Sorry, something went wrong...</p>
-          <button className="button button_restart">try again</button>
         </div>
       }
     >
