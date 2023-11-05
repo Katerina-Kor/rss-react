@@ -19,8 +19,7 @@ body {
   min-height: 100vh;
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
-  background: fixed center / cover no-repeat
-    url(./assets/Land_Travel_Before_Engines.jpg);
+  background: fixed center / cover no-repeat url(./assets/lord_of_rings.jpg);
 }
 
 #root {
