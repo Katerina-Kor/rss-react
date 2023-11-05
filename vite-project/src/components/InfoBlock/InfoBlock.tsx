@@ -2,7 +2,7 @@ import { Outlet, useSearchParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import Pagination from '../Pagination/Pagination';
 import PersonItem from '../PersonItem/PersonItem';
-import { FC, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { PersonResponse } from '../../types/apiResponseTypes';
 import { getPeopleData } from '../../api/apiRequests';
 import searchStringStorage from '../../helpers/CustomStorage';
@@ -18,31 +18,15 @@ const InfoBlock: FC<InfoBlockProps> = ({ isLoading, setIsLoading }) => {
   const [pagesNumber, setPagesNumber] = useState<number>(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const [itemsPerPage, setItemsPerPage] = useState<string>('30');
-
-  useEffect(() => {
-    const searchKeys = [...searchParams.keys()];
-    if (searchKeys.length === 0) {
-      setSearchParams({
-        page: '1',
-        name: searchStringStorage.getValue() || '',
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (!searchParams.has('page') || searchParams.has('details')) return;
-
-    const controller = new AbortController();
-
-    const fetchData = async () => {
+  const fetchData = useCallback(
+    async (signal: AbortSignal) => {
       try {
         setIsLoading(true);
         const data = await getPeopleData(
           searchParams.get('page') || '1',
           searchParams.get('name'),
           itemsPerPage,
-          controller.signal
+          signal
         );
         setPagesNumber(data.pages);
         setPersonData(data.docs);
@@ -53,13 +37,39 @@ const InfoBlock: FC<InfoBlockProps> = ({ isLoading, setIsLoading }) => {
       } finally {
         setIsLoading(false);
       }
-    };
-    fetchData();
+    },
+    [itemsPerPage, searchParams, setIsLoading]
+  );
+
+  useEffect(() => {
+    const searchKeys = [...searchParams.keys()];
+    if (searchKeys.length === 0) {
+      setSearchParams({
+        page: '1',
+        name: searchStringStorage.getValue() || '',
+      });
+    }
+    if (searchKeys.includes('details')) {
+      const controller = new AbortController();
+      fetchData(controller.signal);
+
+      return () => {
+        controller.abort();
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!searchParams.has('page') || searchParams.has('details')) return;
+
+    const controller = new AbortController();
+    fetchData(controller.signal);
 
     return () => {
       controller.abort();
     };
-  }, [searchParams, setIsLoading, itemsPerPage]);
+  }, [fetchData, searchParams]);
 
   return (
     <div className="section person-data_wrapper">
