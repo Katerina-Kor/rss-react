@@ -19,15 +19,18 @@ const InfoBlock: FC<InfoBlockProps> = ({ isLoading, setIsLoading }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
-    setSearchParams({
-      page: '1',
-      name: searchStringStorage.getValue() || '',
-    });
+    const searchKeys = [...searchParams.keys()];
+    if (searchKeys.length === 0) {
+      setSearchParams({
+        page: '1',
+        name: searchStringStorage.getValue() || '',
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!searchParams.has('page')) return;
+    if (!searchParams.has('page') || searchParams.has('details')) return;
 
     const controller = new AbortController();
 
@@ -58,21 +61,35 @@ const InfoBlock: FC<InfoBlockProps> = ({ isLoading, setIsLoading }) => {
   }, [searchParams, setIsLoading]);
 
   return (
-    <div className="section section_person-data">
-      {!isLoading ? (
-        <>
-          {personData.length > 0 ? (
-            personData.map((person) => (
-              <PersonItem personData={person} key={person._id} />
-            ))
-          ) : (
-            <p>{`No such hero in 'the Lord of rings'`}</p>
-          )}
-          <Pagination pagesNumber={pagesNumber} />
-        </>
-      ) : (
-        <Loader />
-      )}
+    <div className="section person-data_wrapper">
+      <div className="section section_person-data">
+        {!isLoading ? (
+          <>
+            {personData.length > 0 ? (
+              personData.map((person) => (
+                <PersonItem personData={person} key={person._id} />
+              ))
+            ) : (
+              <p>{`No such hero in 'the Lord of rings'`}</p>
+            )}
+            <Pagination pagesNumber={pagesNumber} />
+          </>
+        ) : (
+          <Loader />
+        )}
+        <div
+          className={`cover ${
+            searchParams.has('details') ? 'cover_visible' : ''
+          }`}
+          onClick={() => {
+            setSearchParams((prev) => {
+              const newParams = Object.fromEntries(prev.entries());
+              delete newParams.details;
+              return newParams;
+            });
+          }}
+        ></div>
+      </div>
       <Outlet />
     </div>
   );

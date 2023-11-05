@@ -20,4 +20,13 @@ type PersonResponse = {
   _id: string;
 };
 
-export type { PeopleResponse, PersonResponse };
+type DetailedPersonResponse = {
+  limit: number;
+  page: number;
+  pages: number;
+  total: number;
+  offset: number;
+  docs: PersonResponse[];
+};
+
+export type { PeopleResponse, PersonResponse, DetailedPersonResponse };

@@ -15,6 +15,7 @@ const PersonItem: FC<PersonItemProps> = ({ personData }) => {
     <div
       className="item_person"
       onClick={() => {
+        if (searchParams.has('details')) return;
         setSearchParams((prev) => {
           const newParams = Object.fromEntries(prev.entries());
           newParams.details = personData._id;

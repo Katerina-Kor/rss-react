@@ -1,4 +1,7 @@
-import { PeopleResponse } from '../types/apiResponseTypes';
+import {
+  DetailedPersonResponse,
+  PeopleResponse,
+} from '../types/apiResponseTypes';
 
 const basePeopleURL: string = 'https://the-one-api.dev/v2/character';
 const token = import.meta.env.VITE_LORDOFRINGS_API_KEY || '';
@@ -30,7 +33,7 @@ const getDetailedPersonData = async (id: string) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  const dataResponse = await request.json();
+  const dataResponse: DetailedPersonResponse = await request.json();
 
   return dataResponse;
 };
