@@ -26,12 +26,16 @@ const getPeopleData = async (
   return dataResponse;
 };
 
-const getDetailedPersonData = async (id: string) => {
+const getDetailedPersonData = async (
+  id: string,
+  signal: AbortSignal | null = null
+) => {
   const currentUrl = `${basePeopleURL}/${id}`;
   const request: Response = await fetch(currentUrl, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    signal,
   });
   const dataResponse: DetailedPersonResponse = await request.json();
 

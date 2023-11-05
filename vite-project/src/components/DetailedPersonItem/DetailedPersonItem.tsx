@@ -25,15 +25,27 @@ const DetailedPersonItem = () => {
 
   useEffect(() => {
     if (!searchParams.has('details')) return;
+    const controller = new AbortController();
     const fetchData = async () => {
-      setIsLoading(true);
-      const data = await getDetailedPersonData(
-        searchParams.get('details') || ''
-      );
-      setPersonData(data.docs[0]);
-      setIsLoading(false);
+      try {
+        setIsLoading(true);
+        const data = await getDetailedPersonData(
+          searchParams.get('details') || '',
+          controller.signal
+        );
+        setPersonData(data.docs[0]);
+      } catch (error) {
+        if (error instanceof Error && error.name !== 'AbortError') {
+          throw error;
+        }
+      } finally {
+        setIsLoading(false);
+      }
     };
     fetchData();
+    return () => {
+      controller.abort();
+    };
   }, [searchParams]);
 
   return (
