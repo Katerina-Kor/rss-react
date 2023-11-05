@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import './pagination.css';
 import { useSearchParams } from 'react-router-dom';
 
@@ -8,8 +8,8 @@ type paginationProps = {
 
 const Pagination: FC<paginationProps> = ({ pagesNumber }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [currentPage] = useState<string>(searchParams.get('page') || '1');
 
-  const currentPage: string = searchParams.get('page') || '1';
   const changeCurrentPage = (page: string) => {
     setSearchParams((prevParams) => {
       const newParams = Object.fromEntries(prevParams.entries());
@@ -20,7 +20,15 @@ const Pagination: FC<paginationProps> = ({ pagesNumber }) => {
 
   return (
     <div className="pagination">
-      <button className="button button_prev">Prev</button>
+      <button
+        className="button button_prev"
+        onClick={() => {
+          changeCurrentPage(`${+currentPage - 1}`);
+        }}
+        disabled={currentPage === '1'}
+      >
+        Prev
+      </button>
       {Array.from({ length: pagesNumber }, (_, index) => (
         <button
           className={`button ${
@@ -35,7 +43,15 @@ const Pagination: FC<paginationProps> = ({ pagesNumber }) => {
           {index + 1}
         </button>
       ))}
-      <button className="button button_next">Next</button>
+      <button
+        className="button button_next"
+        onClick={() => {
+          changeCurrentPage(`${+currentPage + 1}`);
+        }}
+        disabled={currentPage === `${pagesNumber}`}
+      >
+        Next
+      </button>
     </div>
   );
 };
