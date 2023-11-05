@@ -9,7 +9,7 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import MainPage from './components/pages/MainPage.tsx';
-import Example from './components/example.tsx';
+import DetailedPersonItem from './components/DetailedPersonItem/DetailedPersonItem.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,7 +23,7 @@ const router = createBrowserRouter(
         </div>
       }
     >
-      <Route index element={<Example />}></Route>
+      <Route index element={<DetailedPersonItem />}></Route>
     </Route>
   )
 );

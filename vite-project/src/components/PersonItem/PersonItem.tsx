@@ -9,7 +9,6 @@ type PersonItemProps = {
 };
 
 const PersonItem: FC<PersonItemProps> = ({ personData }) => {
-  // const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   console.log(searchParams);
   return (
@@ -18,10 +17,9 @@ const PersonItem: FC<PersonItemProps> = ({ personData }) => {
       onClick={() => {
         setSearchParams((prev) => {
           const newParams = Object.fromEntries(prev.entries());
-          newParams.details = 'a';
+          newParams.details = personData._id;
           return newParams;
         });
-        // navigate('/');
       }}
     >
       <p>

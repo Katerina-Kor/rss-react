@@ -4,7 +4,7 @@ const basePeopleURL: string = 'https://the-one-api.dev/v2/character';
 const token = import.meta.env.VITE_LORDOFRINGS_API_KEY || '';
 
 const getPeopleData = async (
-  pageNumber: number = 1,
+  pageNumber: string,
   searchString: string | null = null,
   limit: number = 10,
   signal: AbortSignal | null = null
@@ -23,4 +23,16 @@ const getPeopleData = async (
   return dataResponse;
 };
 
-export { getPeopleData };
+const getDetailedPersonData = async (id: string) => {
+  const currentUrl = `${basePeopleURL}/${id}`;
+  const request: Response = await fetch(currentUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const dataResponse = await request.json();
+
+  return dataResponse;
+};
+
+export { getPeopleData, getDetailedPersonData };

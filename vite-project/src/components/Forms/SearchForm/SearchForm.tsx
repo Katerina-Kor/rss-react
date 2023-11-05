@@ -8,20 +8,16 @@ import {
 } from 'react';
 import './searchForm.css';
 import searchStringStorage from '../../../helpers/CustomStorage';
+import { useSearchParams } from 'react-router-dom';
 
 type SearchFormProps = {
   isLoading: boolean;
-  resetPages: () => void;
-  fetchData: (page?: number, signal?: AbortSignal | null) => Promise<void>;
 };
 
-const SearchForm: FC<SearchFormProps> = ({
-  isLoading,
-  resetPages,
-  fetchData,
-}) => {
+const SearchForm: FC<SearchFormProps> = ({ isLoading }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [value, setValue] = useState<string>(
-    searchStringStorage.getValue() || ''
+    searchParams.get('name') || searchStringStorage.getValue() || ''
   );
 
   const inputChange: ChangeEventHandler<HTMLInputElement> = (
@@ -36,28 +32,34 @@ const SearchForm: FC<SearchFormProps> = ({
   ) => {
     event.preventDefault();
     searchStringStorage.setValue(value);
-    resetPages();
-    fetchData(1);
+    setSearchParams((prevParams) => {
+      const newParams = Object.fromEntries(prevParams.entries());
+      newParams.name = value;
+      newParams.page = '1';
+      return newParams;
+    });
   };
 
   return (
-    <form onSubmit={formSubmit} className="form_search">
-      <input
-        type="text"
-        value={value}
-        onChange={inputChange}
-        className="form_search__input"
-        disabled={isLoading}
-        autoFocus
-      />
-      <button
-        type="submit"
-        className="button button_search"
-        disabled={isLoading}
-      >
-        search
-      </button>
-    </form>
+    <div className="section section_search">
+      <form onSubmit={formSubmit} className="form_search">
+        <input
+          type="text"
+          value={value}
+          onChange={inputChange}
+          className="form_search__input"
+          disabled={isLoading}
+          autoFocus
+        />
+        <button
+          type="submit"
+          className="button button_search"
+          disabled={isLoading}
+        >
+          search
+        </button>
+      </form>
+    </div>
   );
 };
 

@@ -1,3 +1,9 @@
+.section_search {
+  display: flex;
+  flex-direction: column;
+  place-content: center;
+}
+
 .form_search {
   display: flex;
   column-gap: 5px;
