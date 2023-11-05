@@ -17,6 +17,7 @@ const InfoBlock: FC<InfoBlockProps> = ({ isLoading, setIsLoading }) => {
   const [personData, setPersonData] = useState<PersonResponse[]>([]);
   const [pagesNumber, setPagesNumber] = useState<number>(0);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [itemsPerPage, setItemsPerPage] = useState<string>('30');
 
   useEffect(() => {
     const searchKeys = [...searchParams.keys()];
@@ -40,7 +41,7 @@ const InfoBlock: FC<InfoBlockProps> = ({ isLoading, setIsLoading }) => {
         const data = await getPeopleData(
           searchParams.get('page') || '1',
           searchParams.get('name'),
-          30,
+          itemsPerPage,
           controller.signal
         );
         setPagesNumber(data.pages);
@@ -58,7 +59,7 @@ const InfoBlock: FC<InfoBlockProps> = ({ isLoading, setIsLoading }) => {
     return () => {
       controller.abort();
     };
-  }, [searchParams, setIsLoading]);
+  }, [searchParams, setIsLoading, itemsPerPage]);
 
   return (
     <div className="section person-data_wrapper">
@@ -66,13 +67,27 @@ const InfoBlock: FC<InfoBlockProps> = ({ isLoading, setIsLoading }) => {
         {!isLoading ? (
           <>
             {personData.length > 0 ? (
-              personData.map((person) => (
-                <PersonItem personData={person} key={person._id} />
-              ))
+              <>
+                {personData.map((person) => (
+                  <PersonItem personData={person} key={person._id} />
+                ))}
+                <Pagination pagesNumber={pagesNumber} />
+                <div className="wrapper__select-items-count">
+                  <p>Items per page:</p>
+                  <select
+                    value={itemsPerPage}
+                    onChange={(e) => setItemsPerPage(e.target.value)}
+                    className="select"
+                  >
+                    <option value={30}>30</option>
+                    <option value={40}>40</option>
+                    <option value={50}>50</option>
+                  </select>
+                </div>
+              </>
             ) : (
               <p>{`No such hero in 'the Lord of rings'`}</p>
             )}
-            <Pagination pagesNumber={pagesNumber} />
           </>
         ) : (
           <Loader />

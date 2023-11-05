@@ -23,3 +23,25 @@
   left: 0px;
   background-color: rgba(128, 128, 128, 0.5);
 }
+
+.wrapper__select-items-count {
+  display: flex;
+  column-gap: 10px;
+  padding: 10px;
+  place-content: center;
+}
+
+.select {
+  color: white;
+  font-size: 20px;
+  padding: 10px;
+  background-color: transparent;
+  border-color: #ffd815;
+}
+
+.select option {
+  color: white;
+  font-size: 20px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.85);
+}

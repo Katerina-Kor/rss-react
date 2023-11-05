@@ -1,9 +1,10 @@
 .pagination {
   padding: 10px 5px;
   display: flex;
-  column-gap: 3px;
+  gap: 3px;
   place-content: center;
   width: 100%;
+  flex-wrap: wrap;
 }
 
 .button.button_current {

@@ -9,7 +9,7 @@ const token = import.meta.env.VITE_LORDOFRINGS_API_KEY || '';
 const getPeopleData = async (
   pageNumber: string,
   searchString: string | null = null,
-  limit: number = 10,
+  limit: string = '30',
   signal: AbortSignal | null = null
 ) => {
   const currentURL = searchString

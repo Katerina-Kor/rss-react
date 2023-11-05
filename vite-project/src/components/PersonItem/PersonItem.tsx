@@ -10,7 +10,6 @@ type PersonItemProps = {
 
 const PersonItem: FC<PersonItemProps> = ({ personData }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  console.log(searchParams);
   return (
     <div
       className="item_person"
