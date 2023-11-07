@@ -8,7 +8,7 @@ import Loader from '../Loader/Loader';
 import ErrorUI from '../ErrorUI/ErrorUI';
 
 const DetailedPersonItem = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [personData, setPersonData] = useState<PersonResponse>({
     birth: 'NaN',
     death: 'NaN',
@@ -63,6 +63,18 @@ const DetailedPersonItem = () => {
     >
       {!isLoading ? (
         <>
+          <div
+            className="close"
+            onClick={() => {
+              setSearchParams((prev) => {
+                const newParams = Object.fromEntries(prev.entries());
+                delete newParams.details;
+                return newParams;
+              });
+            }}
+          >
+            ⨉
+          </div>
           <p>
             {<BoldText text="Name:" />}{' '}
             {personData.name === '' || personData.name === 'NaN'
