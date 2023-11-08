@@ -108,7 +108,14 @@ const InfoBlock: FC<InfoBlockProps> = ({
                   <p>Items per page:</p>
                   <select
                     value={itemsPerPage}
-                    onChange={(e) => setItemsPerPage(e.target.value)}
+                    onChange={(e) => {
+                      setItemsPerPage(e.target.value);
+                      setSearchParams((prev) => {
+                        const newParams = Object.fromEntries(prev.entries());
+                        newParams.page = '1';
+                        return newParams;
+                      });
+                    }}
                     className="select"
                   >
                     <option value={30}>30</option>
