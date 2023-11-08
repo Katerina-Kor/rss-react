@@ -1,13 +1,18 @@
 import { Outlet, useSearchParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import Pagination from '../Pagination/Pagination';
-import PersonItem from '../PersonItem/PersonItem';
-import { FC, useCallback, useEffect, useState } from 'react';
-import { PersonResponse } from '../../types/apiResponseTypes';
+import { FC, useCallback, useContext, useEffect, useState } from 'react';
 import { getPeopleData } from '../../api/apiRequests';
-import searchStringStorage from '../../helpers/CustomStorage';
 import './infoBlock.css';
 import ErrorUI from '../ErrorUI/ErrorUI';
+import { SearchValueContext } from '../../context/SearchContext';
+import {
+  ChangePersonDataContext,
+  PersonDataContext,
+} from '../../context/DataContext';
+import PersonItemList from '../PersonItemList/PersonItemList';
+import ItemsPerPageSelect from '../ItemsPerPageSelect/ItemsPerPageSelect';
+import Cover from '../Cover/Cover';
 
 type InfoBlockProps = {
   isLoading: boolean;
@@ -22,7 +27,9 @@ const InfoBlock: FC<InfoBlockProps> = ({
   setError,
   error,
 }) => {
-  const [personData, setPersonData] = useState<PersonResponse[]>([]);
+  const searchValue = useContext(SearchValueContext);
+  const personData = useContext(PersonDataContext);
+  const changePersonData = useContext(ChangePersonDataContext);
   const [pagesNumber, setPagesNumber] = useState<number>(0);
   const [searchParams, setSearchParams] = useSearchParams();
   const [itemsPerPage, setItemsPerPage] = useState<string>('30');
@@ -32,7 +39,7 @@ const InfoBlock: FC<InfoBlockProps> = ({
         setIsLoading(true);
         const data = await getPeopleData(
           searchParams.get('page') || '1',
-          searchParams.get('name'),
+          searchValue,
           itemsPerPage,
           signal
         );
@@ -45,7 +52,7 @@ const InfoBlock: FC<InfoBlockProps> = ({
           return;
         }
         setPagesNumber(data.pages);
-        setPersonData(data.docs);
+        changePersonData(data.docs);
       } catch (error) {
         if (error instanceof Error && error.name === 'AbortError') {
           return;
@@ -57,7 +64,15 @@ const InfoBlock: FC<InfoBlockProps> = ({
         setIsLoading(false);
       }
     },
-    [itemsPerPage, searchParams, setIsLoading, setError, setSearchParams]
+    [
+      itemsPerPage,
+      searchParams,
+      setIsLoading,
+      setError,
+      setSearchParams,
+      changePersonData,
+      searchValue,
+    ]
   );
 
   useEffect(() => {
@@ -65,7 +80,7 @@ const InfoBlock: FC<InfoBlockProps> = ({
     if (searchKeys.length === 0) {
       setSearchParams({
         page: '1',
-        name: searchStringStorage.getValue() || '',
+        name: searchValue,
       });
     }
     if (searchKeys.includes('details')) {
@@ -100,29 +115,12 @@ const InfoBlock: FC<InfoBlockProps> = ({
           <>
             {personData.length > 0 ? (
               <>
-                {personData.map((person) => (
-                  <PersonItem personData={person} key={person._id} />
-                ))}
+                <PersonItemList />
                 <Pagination pagesNumber={pagesNumber} />
-                <div className="wrapper__select-items-count">
-                  <p>Items per page:</p>
-                  <select
-                    value={itemsPerPage}
-                    onChange={(e) => {
-                      setItemsPerPage(e.target.value);
-                      setSearchParams((prev) => {
-                        const newParams = Object.fromEntries(prev.entries());
-                        newParams.page = '1';
-                        return newParams;
-                      });
-                    }}
-                    className="select"
-                  >
-                    <option value={30}>30</option>
-                    <option value={40}>40</option>
-                    <option value={50}>50</option>
-                  </select>
-                </div>
+                <ItemsPerPageSelect
+                  itemsPerPage={itemsPerPage}
+                  setItemsPerPage={setItemsPerPage}
+                />
               </>
             ) : (
               <p>{`No such hero in 'the Lord of rings'`}</p>
@@ -131,18 +129,7 @@ const InfoBlock: FC<InfoBlockProps> = ({
         ) : (
           <Loader />
         )}
-        <div
-          className={`cover ${
-            searchParams.has('details') ? 'cover_visible' : ''
-          }`}
-          onClick={() => {
-            setSearchParams((prev) => {
-              const newParams = Object.fromEntries(prev.entries());
-              delete newParams.details;
-              return newParams;
-            });
-          }}
-        ></div>
+        <Cover />
       </div>
       <Outlet />
     </div>

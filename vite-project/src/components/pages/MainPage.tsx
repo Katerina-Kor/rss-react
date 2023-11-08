@@ -5,6 +5,8 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import SearchForm from '../Forms/SearchForm/SearchForm';
 import ErrorButton from '../ErrorButton/ErrorButton';
 import InfoBlock from '../InfoBlock/InfoBlock';
+import SearchValueProvider from '../../context/SearchContext';
+import PersonDataProvider from '../../context/DataContext';
 
 const MainPage: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -18,14 +20,18 @@ const MainPage: FC = () => {
         className="heading_main"
       />
       <ErrorBoundary>
-        <SearchForm isLoading={isLoading} setError={setError} />
-        <ErrorButton />
-        <InfoBlock
-          isLoading={isLoading}
-          setIsLoading={setIsLoading}
-          setError={setError}
-          error={error}
-        />
+        <SearchValueProvider>
+          <SearchForm isLoading={isLoading} setError={setError} />
+          <ErrorButton />
+          <PersonDataProvider>
+            <InfoBlock
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+              setError={setError}
+              error={error}
+            />
+          </PersonDataProvider>
+        </SearchValueProvider>
       </ErrorBoundary>
     </main>
   );

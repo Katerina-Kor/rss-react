@@ -4,11 +4,16 @@ import {
   FC,
   FormEvent,
   FormEventHandler,
+  useContext,
   useState,
 } from 'react';
 import './searchForm.css';
 import searchStringStorage from '../../../helpers/CustomStorage';
 import { useSearchParams } from 'react-router-dom';
+import {
+  ChangeSearchValueContext,
+  SearchValueContext,
+} from '../../../context/SearchContext';
 
 type SearchFormProps = {
   isLoading: boolean;
@@ -16,10 +21,10 @@ type SearchFormProps = {
 };
 
 const SearchForm: FC<SearchFormProps> = ({ isLoading, setError }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [value, setValue] = useState<string>(
-    searchParams.get('name') || searchStringStorage.getValue() || ''
-  );
+  const searchValue = useContext(SearchValueContext);
+  const changeSearchValue = useContext(ChangeSearchValueContext);
+  const [value, setValue] = useState<string>(searchValue);
+  const [, setSearchParams] = useSearchParams();
 
   const inputChange: ChangeEventHandler<HTMLInputElement> = (
     event: ChangeEvent<HTMLInputElement>
@@ -32,11 +37,12 @@ const SearchForm: FC<SearchFormProps> = ({ isLoading, setError }) => {
     event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-    searchStringStorage.setValue(value);
+    searchStringStorage.setValue(searchValue);
+    changeSearchValue(value);
     setError(null);
     setSearchParams((prevParams) => {
       const newParams = Object.fromEntries(prevParams.entries());
-      newParams.name = value;
+      newParams.name = searchValue;
       newParams.page = '1';
       return newParams;
     });
