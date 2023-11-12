@@ -25,6 +25,11 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": true
   },
-  "include": ["src"],
+  "include": [
+    "src",
+    "**/*.test.tsx",
+    "./jest-setup.ts",
+    "tests/CardListTests/personItemList.tsx"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

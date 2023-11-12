@@ -60,6 +60,7 @@ const DetailedPersonItem = () => {
     <div
       style={{ display: searchParams.has('details') ? 'block' : 'none' }}
       className="person_details"
+      data-testid="detailed_card"
     >
       {!isLoading ? (
         <>

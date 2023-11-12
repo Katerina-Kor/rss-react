@@ -12,6 +12,7 @@ const PersonItem: FC<PersonItemProps> = ({ personData }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   return (
     <div
+      data-testid="card_item"
       className="item_person"
       onClick={() => {
         if (searchParams.has('details')) return;
@@ -22,10 +23,10 @@ const PersonItem: FC<PersonItemProps> = ({ personData }) => {
         });
       }}
     >
-      <p>
+      <p data-testid="card_name">
         {<BoldText text="Name:" />} {` ${personData.name}`}
       </p>
-      <p>
+      <p data-testid="card_race">
         {<BoldText text="Race:" />}
         {` ${personData.race || 'Unknown'}`}
       </p>
