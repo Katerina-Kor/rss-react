@@ -66,6 +66,7 @@ const DetailedPersonItem = () => {
         <>
           <div
             className="close"
+            data-testid="close_button"
             onClick={() => {
               setSearchParams((prev) => {
                 const newParams = Object.fromEntries(prev.entries());
@@ -76,7 +77,7 @@ const DetailedPersonItem = () => {
           >
             ⨉
           </div>
-          <p>
+          <p data-testid="detailed_card_name">
             {<BoldText text="Name:" />}{' '}
             {personData.name === '' || personData.name === 'NaN'
               ? 'Unknown'
