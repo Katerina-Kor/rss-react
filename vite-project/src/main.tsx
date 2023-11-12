@@ -13,13 +13,16 @@ import ErrorUI from './components/ErrorUI/ErrorUI.tsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route
-      path="/"
-      element={<MainPage />}
-      errorElement={<ErrorUI errorMessage="" />}
-    >
-      <Route index element={<DetailedPersonItem />}></Route>
-    </Route>
+    <>
+      <Route
+        path="/"
+        element={<MainPage />}
+        errorElement={<ErrorUI errorMessage="" />}
+      >
+        <Route index element={<DetailedPersonItem />}></Route>
+      </Route>
+      <Route path="*" element={<ErrorUI errorMessage="Wrong path" />} />
+    </>
   )
 );
 

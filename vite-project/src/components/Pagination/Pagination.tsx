@@ -19,7 +19,7 @@ const Pagination: FC<paginationProps> = ({ pagesNumber }) => {
   };
 
   return (
-    <div className="pagination">
+    <div className="pagination" data-testid="pagination">
       <button
         className="button button_prev"
         onClick={() => {
@@ -31,6 +31,7 @@ const Pagination: FC<paginationProps> = ({ pagesNumber }) => {
       </button>
       {Array.from({ length: pagesNumber }, (_, index) => (
         <button
+          data-testid={`${index + 1}`}
           className={`button ${
             currentPage === `${index + 1}` ? 'button_current' : ''
           }`}

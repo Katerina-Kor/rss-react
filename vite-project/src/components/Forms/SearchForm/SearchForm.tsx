@@ -37,12 +37,12 @@ const SearchForm: FC<SearchFormProps> = ({ isLoading, setError }) => {
     event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
-    searchStringStorage.setValue(searchValue);
+    searchStringStorage.setValue(value);
     changeSearchValue(value);
     setError(null);
     setSearchParams((prevParams) => {
       const newParams = Object.fromEntries(prevParams.entries());
-      newParams.name = searchValue;
+      newParams.name = value;
       newParams.page = '1';
       return newParams;
     });
@@ -52,6 +52,7 @@ const SearchForm: FC<SearchFormProps> = ({ isLoading, setError }) => {
     <div className="section section_search">
       <form onSubmit={formSubmit} className="form_search">
         <input
+          data-testid="input"
           type="text"
           value={value}
           onChange={inputChange}
