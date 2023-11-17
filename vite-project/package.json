@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "format:fix": "prettier . --write",
     "prepare": "cd .. && husky install vite-project/.husky",
-    "test": "jest --coverage"
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "react": "^18.2.0",
