@@ -110,7 +110,6 @@ const InfoBlock: FC<InfoBlockProps> = ({
   }
   return (
     <div className="section person-data_wrapper">
-      <p data-testid="test">{JSON.stringify(searchParams)}</p>
       <div className="section section_person-data">
         {!isLoading ? (
           <>
