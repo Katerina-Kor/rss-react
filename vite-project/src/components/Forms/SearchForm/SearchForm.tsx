@@ -4,26 +4,23 @@ import {
   FC,
   FormEvent,
   FormEventHandler,
-  useContext,
   useState,
 } from 'react';
 import './searchForm.css';
 import searchStringStorage from '../../../helpers/CustomStorage';
 import { useSearchParams } from 'react-router-dom';
-import {
-  ChangeSearchValueContext,
-  SearchValueContext,
-} from '../../../context/SearchContext';
+import { searchSlice } from '../../../store/reducers/searchSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store/store';
 
-type SearchFormProps = {
-  isLoading: boolean;
-  setError: React.Dispatch<React.SetStateAction<string | null>>;
-};
+const SearchForm: FC = () => {
+  const { setSearchValue } = searchSlice.actions;
+  const searchValueRedux = useSelector(
+    (state: RootState) => state.search.searchValue
+  );
+  const dispatch = useDispatch();
 
-const SearchForm: FC<SearchFormProps> = ({ isLoading, setError }) => {
-  const searchValue = useContext(SearchValueContext);
-  const changeSearchValue = useContext(ChangeSearchValueContext);
-  const [value, setValue] = useState<string>(searchValue);
+  const [value, setValue] = useState<string>(searchValueRedux);
   const [, setSearchParams] = useSearchParams();
 
   const inputChange: ChangeEventHandler<HTMLInputElement> = (
@@ -38,8 +35,9 @@ const SearchForm: FC<SearchFormProps> = ({ isLoading, setError }) => {
   ) => {
     event.preventDefault();
     searchStringStorage.setValue(value);
-    changeSearchValue(value);
-    setError(null);
+    // changeSearchValue(value);
+    dispatch(setSearchValue(value));
+    // setError(null);
     setSearchParams((prevParams) => {
       const newParams = Object.fromEntries(prevParams.entries());
       newParams.name = value;
@@ -57,13 +55,13 @@ const SearchForm: FC<SearchFormProps> = ({ isLoading, setError }) => {
           value={value}
           onChange={inputChange}
           className="form_search__input"
-          disabled={isLoading}
+          // disabled={isLoading}
           autoFocus
         />
         <button
           type="submit"
           className="button button_search"
-          disabled={isLoading}
+          // disabled={isLoading}
         >
           search
         </button>

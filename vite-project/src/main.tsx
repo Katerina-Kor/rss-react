@@ -10,6 +10,8 @@ import {
 import MainPage from './components/pages/MainPage.tsx';
 import DetailedPersonItem from './components/DetailedPersonItem/DetailedPersonItem.tsx';
 import ErrorUI from './components/ErrorUI/ErrorUI.tsx';
+import { Provider } from 'react-redux';
+import { store } from './store/store.ts';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,6 +30,8 @@ const router = createBrowserRouter(
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );

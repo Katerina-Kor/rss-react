@@ -5,6 +5,7 @@ type ErrorUIProps = {
 };
 
 const ErrorUI: FC<ErrorUIProps> = ({ errorMessage }) => {
+  console.log(errorMessage);
   const [errorText] = useState<string>(
     errorMessage == 'Unauthorized.'
       ? 'Sorry, you are not authorized.'

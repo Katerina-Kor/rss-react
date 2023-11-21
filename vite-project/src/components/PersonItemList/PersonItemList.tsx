@@ -1,12 +1,11 @@
-import { FC, useContext } from 'react';
-import { PersonDataContext } from '../../context/DataContext';
+import { FC } from 'react';
 import PersonItem from '../PersonItem/PersonItem';
+import { PersonResponse } from '../../types/apiResponseTypes';
 
-const PersonItemList: FC = () => {
-  const personData = useContext(PersonDataContext);
+const PersonItemList: FC<{ data: PersonResponse[] }> = ({ data }) => {
   return (
     <>
-      {personData.map((person) => (
+      {data.map((person) => (
         <PersonItem personData={person} key={person._id} />
       ))}
     </>

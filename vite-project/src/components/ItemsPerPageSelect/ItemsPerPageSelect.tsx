@@ -1,16 +1,16 @@
 import { FC } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
+import { RootState } from '../../store/store';
+import { itemsNumberSlice } from '../../store/reducers/itemsNumberSlice';
 
-type ItemsPerPageProps = {
-  itemsPerPage: string;
-  setItemsPerPage: React.Dispatch<React.SetStateAction<string>>;
-};
-
-const ItemsPerPageSelect: FC<ItemsPerPageProps> = ({
-  itemsPerPage,
-  setItemsPerPage,
-}) => {
+const ItemsPerPageSelect: FC = () => {
   const [, setSearchParams] = useSearchParams();
+  const itemsPerPage = useSelector(
+    (state: RootState) => state.items.itemsPerPage
+  );
+  const { setItemsNumber } = itemsNumberSlice.actions;
+  const dispatch = useDispatch();
 
   return (
     <div className="wrapper__select-items-count">
@@ -18,7 +18,7 @@ const ItemsPerPageSelect: FC<ItemsPerPageProps> = ({
       <select
         value={itemsPerPage}
         onChange={(e) => {
-          setItemsPerPage(e.target.value);
+          dispatch(setItemsNumber(e.target.value));
           setSearchParams((prev) => {
             const newParams = Object.fromEntries(prev.entries());
             newParams.page = '1';

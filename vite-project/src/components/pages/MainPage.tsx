@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import Heading from '../Heading/Heading';
 import { headingLevel } from '../../types/headingTypes';
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
@@ -9,9 +9,6 @@ import SearchValueProvider from '../../context/SearchContext';
 import PersonDataProvider from '../../context/DataContext';
 
 const MainPage: FC = () => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-
   return (
     <main className="main">
       <Heading
@@ -21,15 +18,10 @@ const MainPage: FC = () => {
       />
       <ErrorBoundary>
         <SearchValueProvider>
-          <SearchForm isLoading={isLoading} setError={setError} />
+          <SearchForm />
           <ErrorButton />
           <PersonDataProvider>
-            <InfoBlock
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-              setError={setError}
-              error={error}
-            />
+            <InfoBlock />
           </PersonDataProvider>
         </SearchValueProvider>
       </ErrorBoundary>

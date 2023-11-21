@@ -8,7 +8,9 @@ type paginationProps = {
 
 const Pagination: FC<paginationProps> = ({ pagesNumber }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [currentPage] = useState<string>(searchParams.get('page') || '1');
+  const [currentPage, setCurrentPage] = useState<string>(
+    searchParams.get('page') || '1'
+  );
 
   const changeCurrentPage = (page: string) => {
     setSearchParams((prevParams) => {
@@ -16,6 +18,7 @@ const Pagination: FC<paginationProps> = ({ pagesNumber }) => {
       newParams.page = page;
       return newParams;
     });
+    setCurrentPage(page);
   };
 
   return (
