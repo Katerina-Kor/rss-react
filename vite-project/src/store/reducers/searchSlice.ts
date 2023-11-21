@@ -4,7 +4,6 @@ import searchStringStorage from '../../helpers/CustomStorage';
 type SearchState = {
   searchValue: string;
 };
-// console.log('pathname', window.location.search.slice(1).split('&'))
 const initialState: SearchState = {
   searchValue: window.location.search.includes('name')
     ? window.location.search.slice(1).split('&')[1].slice(5)

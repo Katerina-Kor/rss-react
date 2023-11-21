@@ -6,6 +6,7 @@ type argsType = {
   page: string;
   name: string;
 };
+
 export const cardsAPI = createApi({
   reducerPath: 'cardsAPI',
   baseQuery: fetchBaseQuery({

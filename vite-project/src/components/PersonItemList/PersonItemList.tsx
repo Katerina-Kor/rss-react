@@ -2,7 +2,10 @@ import { FC } from 'react';
 import PersonItem from '../PersonItem/PersonItem';
 import { PersonResponse } from '../../types/apiResponseTypes';
 
-const PersonItemList: FC<{ data: PersonResponse[] }> = ({ data }) => {
+type PersonItemListProps = {
+  data: PersonResponse[];
+};
+const PersonItemList: FC<PersonItemListProps> = ({ data }) => {
   return (
     <>
       {data.map((person) => (

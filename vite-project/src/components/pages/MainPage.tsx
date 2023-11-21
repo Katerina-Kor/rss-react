@@ -5,8 +5,6 @@ import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
 import SearchForm from '../Forms/SearchForm/SearchForm';
 import ErrorButton from '../ErrorButton/ErrorButton';
 import InfoBlock from '../InfoBlock/InfoBlock';
-import SearchValueProvider from '../../context/SearchContext';
-import PersonDataProvider from '../../context/DataContext';
 
 const MainPage: FC = () => {
   return (
@@ -17,13 +15,9 @@ const MainPage: FC = () => {
         className="heading_main"
       />
       <ErrorBoundary>
-        <SearchValueProvider>
-          <SearchForm />
-          <ErrorButton />
-          <PersonDataProvider>
-            <InfoBlock />
-          </PersonDataProvider>
-        </SearchValueProvider>
+        <SearchForm />
+        <ErrorButton />
+        <InfoBlock />
       </ErrorBoundary>
     </main>
   );

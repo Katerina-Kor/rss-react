@@ -1,60 +1,20 @@
 import { useSearchParams } from 'react-router-dom';
 import BoldText from '../BoldText/BoldText';
-import { useEffect, useState } from 'react';
-import { getDetailedPersonData } from '../../api/apiRequests';
-import { PersonResponse } from '../../types/apiResponseTypes';
 import './detailedPersonItem.css';
 import Loader from '../Loader/Loader';
 import ErrorUI from '../ErrorUI/ErrorUI';
+import { detailedCardAPI } from '../../services/detailedCardService';
 
 const DetailedPersonItem = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [personData, setPersonData] = useState<PersonResponse>({
-    birth: 'NaN',
-    death: 'NaN',
-    gender: 'NaN',
-    hair: 'NaN',
-    height: 'NaN',
-    name: 'NaN',
-    race: 'NaN',
-    realm: 'NaN',
-    spouse: 'NaN',
-    wikiUrl: 'NaN',
-    _id: 'NaN',
-  });
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, isError, isSuccess, isFetching } =
+    detailedCardAPI.useFetchDetailedCardQuery(
+      searchParams.get('details') || '',
+      { skip: !searchParams.has('details') }
+    );
 
-  useEffect(() => {
-    if (!searchParams.has('details')) return;
-    const controller = new AbortController();
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const data = await getDetailedPersonData(
-          searchParams.get('details') || '',
-          controller.signal
-        );
-        setPersonData(data.docs[0]);
-      } catch (error) {
-        if (error instanceof Error && error.name === 'AbortError') {
-          return;
-        }
-        if (error instanceof Error) {
-          setError(error.message);
-        }
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-    return () => {
-      controller.abort();
-    };
-  }, [searchParams]);
-
-  if (error) {
-    return <ErrorUI errorMessage={error} />;
+  if (isError) {
+    return <ErrorUI errorMessage={'error'} />;
   }
   return (
     <div
@@ -62,69 +22,73 @@ const DetailedPersonItem = () => {
       className="person_details"
       data-testid="detailed_card"
     >
-      {!isLoading ? (
+      {!isFetching ? (
         <>
-          <div
-            className="close"
-            data-testid="close_button"
-            onClick={() => {
-              setSearchParams((prev) => {
-                const newParams = Object.fromEntries(prev.entries());
-                delete newParams.details;
-                return newParams;
-              });
-            }}
-          >
-            ⨉
-          </div>
-          <p data-testid="detailed_card_name">
-            {<BoldText text="Name:" />}{' '}
-            {personData.name === '' || personData.name === 'NaN'
-              ? 'Unknown'
-              : personData.name}
-          </p>
-          <p>
-            {<BoldText text="Race:" />}{' '}
-            {personData.race === '' || personData.race === 'NaN'
-              ? 'Unknown'
-              : personData.race}
-          </p>
-          <p>
-            {<BoldText text="Gender:" />}{' '}
-            {personData.gender === '' || personData.gender === 'NaN'
-              ? 'Unknown'
-              : personData.gender}
-          </p>
-          <p>
-            {<BoldText text="Birth:" />}{' '}
-            {personData.birth === '' || personData.birth === 'NaN'
-              ? 'Unknown'
-              : personData.birth}
-          </p>
-          <p>
-            {<BoldText text="Death:" />}{' '}
-            {personData.death === '' || personData.death === 'NaN'
-              ? 'Unknown'
-              : personData.death}
-          </p>
-          <p>
-            {<BoldText text="Hair:" />}{' '}
-            {personData.hair === '' || personData.hair === 'NaN'
-              ? 'Unknown'
-              : personData.hair}
-          </p>
-          <p>
-            {<BoldText text="Height:" />}{' '}
-            {personData.height === '' || personData.height === 'NaN'
-              ? 'Unknown'
-              : personData.height}
-          </p>
-          <p>
-            {<BoldText text="Spouse:" />}{' '}
-            {personData.spouse === '' || personData.spouse === 'NaN'
-              ? 'Unknown'
-              : personData.spouse}
-          </p>
+          {isSuccess && data.docs.length > 0 && (
+            <>
+              <div
+                className="close"
+                data-testid="close_button"
+                onClick={() => {
+                  setSearchParams((prev) => {
+                    const newParams = Object.fromEntries(prev.entries());
+                    delete newParams.details;
+                    return newParams;
+                  });
+                }}
+              >
+                ⨉
+              </div>
+              <p data-testid="detailed_card_name">
+                {<BoldText text="Name:" />}{' '}
+                {data.docs[0].name === '' || data.docs[0].name === 'NaN'
+                  ? 'Unknown'
+                  : data.docs[0].name}
+              </p>
+              <p>
+                {<BoldText text="Race:" />}{' '}
+                {data.docs[0].race === '' || data.docs[0].race === 'NaN'
+                  ? 'Unknown'
+                  : data.docs[0].race}
+              </p>
+              <p>
+                {<BoldText text="Gender:" />}{' '}
+                {data.docs[0].gender === '' || data.docs[0].gender === 'NaN'
+                  ? 'Unknown'
+                  : data.docs[0].gender}
+              </p>
+              <p>
+                {<BoldText text="Birth:" />}{' '}
+                {data.docs[0].birth === '' || data.docs[0].birth === 'NaN'
+                  ? 'Unknown'
+                  : data.docs[0].birth}
+              </p>
+              <p>
+                {<BoldText text="Death:" />}{' '}
+                {data.docs[0].death === '' || data.docs[0].death === 'NaN'
+                  ? 'Unknown'
+                  : data.docs[0].death}
+              </p>
+              <p>
+                {<BoldText text="Hair:" />}{' '}
+                {data.docs[0].hair === '' || data.docs[0].hair === 'NaN'
+                  ? 'Unknown'
+                  : data.docs[0].hair}
+              </p>
+              <p>
+                {<BoldText text="Height:" />}{' '}
+                {data.docs[0].height === '' || data.docs[0].height === 'NaN'
+                  ? 'Unknown'
+                  : data.docs[0].height}
+              </p>
+              <p>
+                {<BoldText text="Spouse:" />}{' '}
+                {data.docs[0].spouse === '' || data.docs[0].spouse === 'NaN'
+                  ? 'Unknown'
+                  : data.docs[0].spouse}
+              </p>
+            </>
+          )}
         </>
       ) : (
         <Loader />

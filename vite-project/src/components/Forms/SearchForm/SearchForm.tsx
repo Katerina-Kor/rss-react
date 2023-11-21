@@ -15,12 +15,11 @@ import { RootState } from '../../../store/store';
 
 const SearchForm: FC = () => {
   const { setSearchValue } = searchSlice.actions;
-  const searchValueRedux = useSelector(
+  const searchValue = useSelector(
     (state: RootState) => state.search.searchValue
   );
   const dispatch = useDispatch();
-
-  const [value, setValue] = useState<string>(searchValueRedux);
+  const [value, setValue] = useState<string>(searchValue);
   const [, setSearchParams] = useSearchParams();
 
   const inputChange: ChangeEventHandler<HTMLInputElement> = (
@@ -35,9 +34,7 @@ const SearchForm: FC = () => {
   ) => {
     event.preventDefault();
     searchStringStorage.setValue(value);
-    // changeSearchValue(value);
     dispatch(setSearchValue(value));
-    // setError(null);
     setSearchParams((prevParams) => {
       const newParams = Object.fromEntries(prevParams.entries());
       newParams.name = value;
@@ -55,14 +52,9 @@ const SearchForm: FC = () => {
           value={value}
           onChange={inputChange}
           className="form_search__input"
-          // disabled={isLoading}
           autoFocus
         />
-        <button
-          type="submit"
-          className="button button_search"
-          // disabled={isLoading}
-        >
+        <button type="submit" className="button button_search">
           search
         </button>
       </form>

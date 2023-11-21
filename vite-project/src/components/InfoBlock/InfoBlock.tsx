@@ -20,48 +20,6 @@ const InfoBlock: FC = () => {
   const itemsPerPage = useSelector(
     (state: RootState) => state.items.itemsPerPage
   );
-  // const [itemsPerPage, setItemsPerPage] = useState<string>('30');
-  // const fetchData = useCallback(
-  //   async (signal: AbortSignal) => {
-  //     try {
-  //       setIsLoading(true);
-  //       const data = await getPeopleData(
-  //         searchParams.get('page') || '1',
-  //         searchValue,
-  //         itemsPerPage,
-  //         signal
-  //       );
-  //       if (data.page > data.pages) {
-  //         setSearchParams((prev) => {
-  //           const newParams = Object.fromEntries(prev.entries());
-  //           newParams.page = '1';
-  //           return newParams;
-  //         });
-  //         return;
-  //       }
-  //       setPagesNumber(data.pages);
-  //       changePersonData(data.docs);
-  //     } catch (error) {
-  //       if (error instanceof Error && error.name === 'AbortError') {
-  //         return;
-  //       }
-  //       if (error instanceof Error) {
-  //         setError(error.message);
-  //       }
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   },
-  //   [
-  //     itemsPerPage,
-  //     searchParams,
-  //     setIsLoading,
-  //     setError,
-  //     setSearchParams,
-  //     changePersonData,
-  //     searchValue,
-  //   ]
-  // );
 
   useEffect(() => {
     const searchKeys = [...searchParams.keys()];
@@ -75,27 +33,8 @@ const InfoBlock: FC = () => {
     if (searchName && searchName !== searchStringStorage.getValue()) {
       searchStringStorage.setValue(searchName);
     }
-    // if (searchKeys.includes('details')) {
-    //   const controller = new AbortController();
-    //   fetchData(controller.signal);
-
-    //   return () => {
-    //     controller.abort();
-    //   };
-    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // useEffect(() => {
-  //   if (!searchParams.has('page') || searchParams.has('details')) return;
-
-  //   const controller = new AbortController();
-  //   fetchData(controller.signal);
-
-  //   return () => {
-  //     controller.abort();
-  //   };
-  // }, [fetchData, searchParams]);
 
   const { data, isError, isSuccess, isFetching } = cardsAPI.useFetchCardsQuery({
     limit: itemsPerPage,
