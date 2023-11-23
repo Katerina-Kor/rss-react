@@ -11,15 +11,28 @@ const rootReducer = combineReducers({
   [detailedCardAPI.reducerPath]: detailedCardAPI.reducer,
 });
 
-export const store = configureStore({
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) => {
-    return [
-      ...getDefaultMiddleware(),
-      cardsAPI.middleware,
-      detailedCardAPI.middleware,
-    ];
-  },
-});
+export const setupStore = () => {
+  return configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => {
+      return [
+        ...getDefaultMiddleware(),
+        cardsAPI.middleware,
+        detailedCardAPI.middleware,
+      ];
+    },
+  });
+};
+
+// export const store = configureStore({
+//   reducer: rootReducer,
+//   middleware: (getDefaultMiddleware) => {
+//     return [
+//       ...getDefaultMiddleware(),
+//       cardsAPI.middleware,
+//       detailedCardAPI.middleware,
+//     ];
+//   },
+// });
 
 export type RootState = ReturnType<typeof rootReducer>;

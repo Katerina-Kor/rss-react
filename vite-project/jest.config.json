@@ -1,5 +1,8 @@
 {
   "testEnvironment": "jsdom",
+  "testEnvironmentOptions": {
+    "customExportConditions": [""]
+  },
   "transform": {
     "^.+\\.tsx?$": [
       "ts-jest",
@@ -23,6 +26,7 @@
     ]
   },
   "extensionsToTreatAsEsm": [".ts", ".tsx"],
+  "setupFiles": ["./jest.polyfills.js"],
   "setupFilesAfterEnv": ["./jest-setup.ts"],
   "collectCoverageFrom": ["src/**/*.tsx", "!**/node_modules/**"],
   "moduleNameMapper": {
